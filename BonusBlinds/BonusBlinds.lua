@@ -4,7 +4,7 @@
 --- PREFIX: bb
 --- MOD_AUTHOR: [mathguy]
 --- MOD_DESCRIPTION: Bonus Blinds
---- VERSION: 1.1.0
+--- VERSION: 1.2.0
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
@@ -123,11 +123,11 @@ local bonusType = SMODS.ConsumableType {
     primary_colour = G.C.RED,
     secondary_colour = G.C.RED,
     loc_txt = {
-        name = 'Bonus Blind',
-        collection = 'Bonus Blinds',
+        name = '额外盲注',
+        collection = '额外盲注',
         undiscovered = {
-            name = 'Undiscovered Bonus',
-            text = { 'idk stuff ig' },
+            name = '未发现的盲注',
+            text = { '我不到啊' },
         }
     },
     collection_rows = { 6, 6 },
@@ -197,10 +197,10 @@ local unknown = SMODS.UndiscoveredSprite {
 SMODS.Bonus {
     key = 'extra',
     loc_txt = {
-        name = "Bonus Blind",
+        name = "额外盲注",
         text = {
-            "Charges {C:money}$#2#{}",
-            "to play {C:blue}#1#{}"
+            "支付{C:money}$#2#",
+            "并对阵{C:blue}#1#"
         }
     },
     atlas = "another",
@@ -237,10 +237,10 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'needy',
     loc_txt = {
-        name = "Needy Blind",
+        name = "“捉襟见肘”",
         text = {
-            "Play a {C:attention}Boss Blind{}",
-            "with only {C:blue}#1#{} Hand"
+            "以{C:blue}#1#{}次出牌",
+            "对阵随机的{C:attention}Boss{}盲注"
         }
     },
     atlas = "another",
@@ -267,10 +267,10 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'sail',
     loc_txt = {
-        name = "Sailing Blind",
+        name = "“扬帆远航”",
         text = {
-            "Play a {C:attention}Boss Blind{}",
-            "with {C:red}#1#{} Discards"
+            "以{C:blue}#1#{}次弃牌",
+            "对阵随机的{C:attention}Boss{}盲注"
         }
     },
     atlas = "another",
@@ -297,10 +297,10 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'locked',
     loc_txt = {
-        name = "Locked Blind",
+        name = "“批枷带锁”",
         text = {
-            "Play {C:blue}#1#{} with",
-            "{C:attention}-#2#{} Hand Size"
+            "对阵{C:blue}#1#",
+            "手牌上限{C:attention}-#2#"
         }
     },
     atlas = "another",
@@ -321,10 +321,11 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'fixed',
     loc_txt = {
-        name = "Fixed Blind",
+        name = "“岿然不动”",
         text = {
-            "All {C:attention}Jokers{} become {C:attention}Pinned{}",
-            "then play {C:blue}#1#{}"
+            "对阵{C:blue}#1#",
+            "所有{C:attention}小丑牌",
+            "均将遭到{C:attention}左极固定",
         }
     },
     atlas = "another",
@@ -344,10 +345,10 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'combo',
     loc_txt = {
-        name = "Combo Blind",
+        name = "“稀里糊涂”",
         text = {
-            "Play {C:blue}#1#{}. All {C:attention}Jokers{}",
-            "{C:attention}face down{} this blind."
+            "对阵{C:blue}#1#",
+            "所有{C:attention}小丑牌背面朝上"
         }
     },
     atlas = "another",
@@ -368,10 +369,11 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'brick',
     loc_txt = {
-        name = "Brick Blind",
+        name = "“固若金汤”",
         text = {
-            "Play a {C:attention}Boss Blind{}",
-            "with {C:blue}X#1# Blind Size{}"
+            "对阵随机一个",
+            "{C:blue}得分要求X#1#{}的",
+            "{C:attention}Boss{}盲注"
         }
     },
     atlas = "another",
@@ -398,9 +400,9 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'watching',
     loc_txt = {
-        name = "Watching Blind",
+        name = "“手眼通天”",
         text = {
-            "Play {C:green}#1#{}"
+            "对阵{C:green}#1#"
         }
     },
     atlas = "another",
@@ -421,11 +423,13 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'sky',
     loc_txt = {
-        name = "Sky-High Blind",
+        name = "“晴空万里”",
         text = {
-            "Play {C:blue}#1#{} with {C:attention}double{}",
-            "your {C:attention}best hand{} added to {C:blue}Blind Size{}",
-            "{C:inactive}(Best Hand:{}{C:attention} #2#{}{C:inactive}){}"
+            "对阵{C:blue}#1#",
+            "将{C:attention}最优{}牌型的",
+            "基础得分的{C:attention}双倍",
+            "加值至{C:blue}最低得分要求",
+            "{C:inactive}（当前最优牌型：{C:attention} #2#{C:inactive}）"
         }
     },
     atlas = "another",
@@ -447,11 +451,11 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'cruel',
     loc_txt = {
-        name = "Cruel Blind",
+        name = "“惨无人道”",
         text = {
-            "Play a {C:attention}Boss Blind{} with",
-            "at least {C:attention}#1#{} empty {C:attention}Joker Slot{}",
-            "{C:inactive}(can destroy jokers){}"
+            "以至少{C:attention}#1#{}个空的{C:attention}小丑牌槽位",
+            "对阵随机的{C:attention}Boss{}盲注",
+            "{C:inactive}（会摧毁小丑牌以满足需求）"
         }
     },
     atlas = "another",
@@ -480,10 +484,10 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'redo',
     loc_txt = {
-        name = "Redo Blind",
+        name = "“卷土重来”",
         text = {
-            "Defeat {C:purple}#1#{} with ",
-            "{C:blue}X3 Blind Size{} to get a {C:attention}#2#{}"
+            "对阵{C:blue}得分要求X3{}的{C:purple}#1#",
+            "成功击败后，获得{C:attention}#2#"
         }
     },
     atlas = "another",
@@ -506,10 +510,10 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'broken',
     loc_txt = {
-        name = "Broken Blind",
+        name = "“断垣残壁”",
         text = {
-            "{C:green}#1# in #2#{} chance to",
-            "play a {C:blue}#3#{}"
+            "有{C:green}#1#/#2#{}的几率",
+            "对阵{C:blue}#3#"
         }
     },
     atlas = "another",
@@ -551,10 +555,10 @@ SMODS.Bonus {
 SMODS.Bonus {
     key = 'spoiler',
     loc_txt = {
-        name = "Spoiler Blind",
+        name = "“终章剧透”",
         text = {
-            "Play {C:attention}Ante #1#s{} {C:attention}Showdown Blind{}",
-            "on this {C:attention}Ante{}"
+            "在当前{C:attention}底注{}中",
+            "对阵{C:attention}底注#1#{}的{C:attention}关底盲注"
         }
     },
     atlas = "another",
@@ -999,10 +1003,10 @@ SMODS.Bonus {
 SMODS.Spectral {
     key = 'loop',
     loc_txt = {
-        name = "Loop",
+        name = "循环",
         text = {
-            "Create a random",
-            "{C:red}Bonus Blind{}"
+            "随机生成一张",
+            "{C:red}额外盲注"
         }
     },
     atlas = "loops",
@@ -1027,10 +1031,10 @@ SMODS.Tag {
     key = 'ironic',
     atlas = 'bonus_tags',
     loc_txt = {
-        name = "Ironic Tag",
+        name = "叙事标签",
         text = {
-            "Gives a free",
-            "{C:red}Jumbo Blind Pack"
+            "免费获得一个",
+            "{C:red}巨型盲注包"
         }
     },
     pos = {x = 0, y = 0},
@@ -1063,11 +1067,10 @@ SMODS.Tag {
 SMODS.Voucher {
     key = 'bonus1',
     loc_txt = {
-        name = "Blind Merchant",
+        name = "盲注商人",
         text = {
-            "{C:red}Bonus Blinds{} cards appear",
-            "{C:attention}#1#X{} more frequently",
-            "in the shop"
+            "商店内{C:red}额外盲注{}的",
+            "出现频率{C:attention}X#1#"
         }
     },
     config = {rate = 1.5},
@@ -1090,11 +1093,10 @@ SMODS.Voucher {
 SMODS.Voucher {
     key = 'bonus2',
     loc_txt = {
-        name = "Blind Tycoon",
+        name = "盲注大亨",
         text = {
-            "{C:red}Bonus Blinds{} cards appear",
-            "{C:attention}#1#X{} more frequently",
-            "in the shop"
+            "商店内{C:red}额外盲注{}的",
+            "出现频率{C:attention}X#1#"
         }
     },
     config = {rate = 3},
@@ -1119,10 +1121,10 @@ SMODS.Joker {
     key = 'change',
     name = "Loose Change",
     loc_txt = {
-        name = "Loose Change",
+        name = "一块零钱",
         text = {
-            "{C:attention}Bonus Blinds{} give",
-            "reward money."
+            "{C:attention}额外盲注",
+            "可给予奖励金"
         }
     },
     rarity = 2,
@@ -1157,10 +1159,11 @@ SMODS.Booster {
    atlas = 'boostery',
    group_key = 'k_blind_pack',
    loc_txt = {
-        name = "Blind Pack",
+        name = "盲注包",
         text = {
-            "Choose {C:attention}#1#{} of up to",
-            "{C:attention}#2#{C:red} Bonus Blinds{}"
+            "从最多{C:attention}#2#{}张",
+            "{C:red}额外盲注{}中",
+            "选择{C:attention}#1#{}张"
         }
     },
     weight = 0.3,
@@ -1177,10 +1180,11 @@ SMODS.Booster {
    atlas = 'boostery',
    group_key = 'k_blind_pack',
    loc_txt = {
-    name = "Jumbo Blind Pack",
+    name = "巨型盲注包",
         text = {
-            "Choose {C:attention}#1#{} of up to",
-            "{C:attention}#2#{C:red} Bonus Blinds{}"
+            "从最多{C:attention}#2#{}张",
+            "{C:red}额外盲注{}中",
+            "选择{C:attention}#1#{}张"
         }
     },
     weight = 0.3,
@@ -1198,10 +1202,11 @@ SMODS.Booster {
    atlas = 'boostery',
    group_key = 'k_blind_pack',
    loc_txt = {
-        name = "Mega Blind Pack",
+        name = "超级盲注包",
         text = {
-            "Choose {C:attention}#1#{} of up to",
-            "{C:attention}#2#{C:red} Bonus Blinds{}"
+            "从最多{C:attention}#2#{}张",
+            "{C:red}额外盲注{}中",
+            "选择{C:attention}#1#{}张"
         }
     },
     weight = 0.07,
@@ -1221,12 +1226,11 @@ SMODS.Booster {
 SMODS.Back {
     key = 'ante',
     loc_txt = {
-        name = "Ante Deck",
+        name = "底注牌组",
         text = {
-            "{C:red}Bonus Blinds{} show up",
-            "more often.",
-            "Required score scales far",
-            "faster for each {C:attention}Ante"
+            "提升{C:red}额外盲注{}的出现频率",
+            "大大增加{C:attention}底注{}提升时",
+            "得分要求的涨幅"
         }
     },
     name = "Ante Deck",
@@ -1243,8 +1247,8 @@ SMODS.Atlas({ key = "blinds", atlas_table = "ANIMATION_ATLAS", path = "blinds.pn
 
 SMODS.Blind {
     loc_txt = {
-        name = 'The Watch',
-        text = { 'The Eye and Psychic', 'simultaneously' }
+        name = '全视',
+        text = { '眼睛 + 灵媒' }
     },
     key = 'watch',
     name = 'The Watch',
@@ -1284,7 +1288,7 @@ SMODS.Blind {
         if not check then G.GAME.blind.hands[handname] = true end
     end,
     get_loc_debuff_text = function(self)
-        return "Must play 5 Cards and no repeat hand types this round"
+        return "必须出5张牌，不可打出重复牌型"
     end,
     in_pool = function(self)
         return false
