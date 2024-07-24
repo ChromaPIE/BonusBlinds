@@ -6,29 +6,27 @@ priority = 0
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
-pattern = '''G.GAME.round_resets.blind_states.Small = 'Defeated''''
-position = 'after'
-payload = '''elseif (bonuser == true) then
-    bonus_reward(G.GAME.blind.config.bonus)'''
+pattern = '''if G.GAME.round_resets.blind == G.P_BLINDS.bl_small then'''
+position = 'at'
+payload = '''if G.GAME.blind_on_deck == 'Small' then'''
 match_indent = true
 
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
-pattern = '''if G.GAME.round_resets.blind == G.P_BLINDS.bl_small then'''
-position = 'at'
-payload = '''if (bonuser ~= true) and (G.GAME.round_resets.blind == G.P_BLINDS.bl_small) then'''
-match_indent = true
-overwrite = true
+pattern = '''G.GAME.round_resets.blind_states.Small = 'Defeated''''
+position = 'after'
+payload = '''                        elseif G.GAME.blind_on_deck == 'Bonus' then
+                            bonus_reward(G.GAME.blind.config.bonus)'''
+match_indent = false
 
 [[patches]]
 [patches.pattern]
 target = 'functions/state_events.lua'
 pattern = '''G.FUNCS.draw_from_hand_to_discard()'''
 position = 'before'
-payload = '''local bonuser = false
+payload = '''
 if G.GAME.blind:get_type() == 'Bonus' then
-    bonuser = true
     bonus_end_of_round(G.GAME.blind.config.bonus)
 end'''
 match_indent = true
@@ -49,6 +47,7 @@ target = 'blind.lua'
 pattern = 'function Blind:load(blindTable)'
 position = 'after'
 payload = '''self.config.bonus = blindTable.bonusy
+self.config.timing = blindTable.timer or 0
 
 '''
 match_indent = true
@@ -59,6 +58,7 @@ target = 'blind.lua'
 pattern = 'return blindTable'
 position = 'before'
 payload = '''blindTable.bonusy = self.config.bonus
+blindTable.timer = self.config.timing or 0
     '''
 match_indent = true
 
@@ -207,3 +207,84 @@ payload = '''if G.GAME.blind and G.GAME.blind.config and G.GAME.blind.config.bon
     ret = ret + G.GAME.blind.config.bonus.dollars_score
 end'''
 match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/UI_definitions.lua'
+pattern = '''function G.UIDEF.shop()'''
+position = 'after'
+payload = '''if G.GAME.super_shop then return coolShop() end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''G.FUNCS.toggle_shop = function(e)'''
+position = 'after'
+payload = '''G.GAME.super_shop = nil'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''if not shop_exists then'''
+position = 'after'
+payload = '''   nosave_shop = handle_special_shop_card(nosave_shop)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'game.lua'
+pattern = '''self.load_shop_vouchers = nil'''
+position = 'after'
+payload = '''self.load_special_card = nil'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/common_events.lua'
+pattern = '''G.shop_jokers.T.w = G.GAME.shop.joker_max*1.01*G.CARD_W'''
+position = 'at'
+payload = '''if G.GAME.super_shop then
+    G.shop_jokers.T.w = math.min(3, G.GAME.shop.joker_max)*1.01*G.CARD_W 
+else 
+    G.shop_jokers.T.w = G.GAME.shop.joker_max*1.01*G.CARD_W
+end'''
+match_indent = true
+overwrite = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.name == 'Rocket' and G.GAME.blind.boss then'''
+position = 'at'
+payload = '''if self.ability.name == 'Rocket' and G.GAME.blind.boss and not (G.GAME.blind.config and  G.GAME.blind.config.bonus) then'''
+match_indent = true
+overwrite = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if self.ability.name == 'Campfire' and G.GAME.blind.boss and self.ability.x_mult > 1 then'''
+position = 'at'
+payload = '''if self.ability.name == 'Campfire' and G.GAME.blind.boss and not (G.GAME.blind.config and G.GAME.blind.config.bonus) and self.ability.x_mult > 1 then'''
+match_indent = true
+overwrite = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''local disableable = G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss'))'''
+position = 'after'
+payload = '''disableable = (disableable == true) or (G.GAME.blind and (G.GAME.blind:get_type() == 'Bonus') and G.GAME.blind.boss)'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = '''if G.GAME.blind and ((not G.GAME.blind.disabled) and (G.GAME.blind:get_type() == 'Boss')) then'''
+position = 'at'
+payload = '''if G.GAME.blind and ((not G.GAME.blind.disabled) and ((G.GAME.blind:get_type() == 'Boss') or ((G.GAME.blind:get_type() == 'Bonus') and G.GAME.blind.boss))) then'''
+match_indent = true
+overwrite = true
+
