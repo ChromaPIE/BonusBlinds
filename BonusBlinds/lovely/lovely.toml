@@ -307,8 +307,12 @@ overwrite = true
 target = 'card.lua'
 pattern = '''badges[#badges + 1] = 'negative_playing_card''''
 position = 'after'
-payload = '''           elseif self.edition.type == 'bb_antichrome' then
-            badges[#badges + 1] = 'loc_antichrome_' .. tostring(self.edition.antichrome_rounds)'''
+payload = '''           elseif self.edition.type == 'bb_antichrome' and self.ability.consumeable then
+                badges[#badges + 1] = 'loc_antichrome_c_' .. tostring(self.edition.antichrome_rounds)
+            elseif self.edition.type == 'bb_antichrome' and (self.ability.set == 'Enhanced' or self.ability.set == 'Default') then
+                badges[#badges + 1] = 'loc_antichrome_p_' .. tostring(self.edition.antichrome_rounds)
+            elseif self.edition.type == 'bb_antichrome' then
+                badges[#badges + 1] = 'loc_antichrome_' .. tostring(self.edition.antichrome_rounds)'''
 match_indent = false
 
 [[patches]]
@@ -319,7 +323,15 @@ position = 'after'
 payload = '''if v == 'loc_antichrome_3' then info_queue[#info_queue+1] = {key = 'antichrome_3', set = 'Other'} end
 if v == 'loc_antichrome_2' then info_queue[#info_queue+1] = {key = 'antichrome_2', set = 'Other'} end
 if v == 'loc_antichrome_1' then info_queue[#info_queue+1] = {key = 'antichrome_1', set = 'Other'} end
-if v == 'loc_antichrome_0' then info_queue[#info_queue+1] = {key = 'antichrome_0', set = 'Other'} end'''
+if v == 'loc_antichrome_0' then info_queue[#info_queue+1] = {key = 'antichrome_0', set = 'Other'} end
+if v == 'loc_antichrome_c_3' then info_queue[#info_queue+1] = {key = 'antichrome_c_3', set = 'Other'} end
+if v == 'loc_antichrome_c_2' then info_queue[#info_queue+1] = {key = 'antichrome_c_2', set = 'Other'} end
+if v == 'loc_antichrome_c_1' then info_queue[#info_queue+1] = {key = 'antichrome_c_1', set = 'Other'} end
+if v == 'loc_antichrome_c_0' then info_queue[#info_queue+1] = {key = 'antichrome_c_0', set = 'Other'} end
+if v == 'loc_antichrome_p_3' then info_queue[#info_queue+1] = {key = 'antichrome_p_3', set = 'Other'} end
+if v == 'loc_antichrome_p_2' then info_queue[#info_queue+1] = {key = 'antichrome_p_2', set = 'Other'} end
+if v == 'loc_antichrome_p_1' then info_queue[#info_queue+1] = {key = 'antichrome_p_1', set = 'Other'} end
+if v == 'loc_antichrome_p_0' then info_queue[#info_queue+1] = {key = 'antichrome_p_0', set = 'Other'} end'''
 match_indent = true
 
 [[patches]]
@@ -338,6 +350,83 @@ position = 'after'
 payload = '''loc_antichrome_3 = G.C.DARK_EDITION,
 loc_antichrome_2 = G.C.DARK_EDITION,
 loc_antichrome_1 = G.C.DARK_EDITION,
-loc_antichrome_0 = G.C.DARK_EDITION,'''
+loc_antichrome_0 = G.C.DARK_EDITION,
+loc_antichrome_c_3 = G.C.DARK_EDITION,
+loc_antichrome_c_2 = G.C.DARK_EDITION,
+loc_antichrome_c_1 = G.C.DARK_EDITION,
+loc_antichrome_c_0 = G.C.DARK_EDITION,
+loc_antichrome_p_3 = G.C.DARK_EDITION,
+loc_antichrome_p_2 = G.C.DARK_EDITION,
+loc_antichrome_p_1 = G.C.DARK_EDITION,
+loc_antichrome_p_0 = G.C.DARK_EDITION,'''
 match_indent = true
 
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''not (card.ability.set == 'Joker' and #G.jokers.cards < G.jokers.config.card_limit + ((card.edition and card.edition.negative) and 1 or 0)) and'''
+position = 'at'
+payload = '''not (card.ability.set == 'Joker' and #G.jokers.cards < G.jokers.config.card_limit + ((card.edition and card.edition.negative) and 1 or 0) + ((card.edition and card.edition.bb_antichrome) and 2 or 0)) and'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'functions/button_callbacks.lua'
+pattern = '''not (card.ability.consumeable and #G.consumeables.cards < G.consumeables.config.card_limit + ((card.edition and card.edition.negative) and 1 or 0)) then'''
+position = 'at'
+payload = '''not (card.ability.consumeable and #G.consumeables.cards < G.consumeables.config.card_limit + ((card.edition and card.edition.negative) and 1 or 0) + ((card.edition and card.edition.bb_antichrome) and 2 or 0)) then'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/UI_definitions.lua"
+pattern = "if not run_info then G.GAME.round_resets.blind_states[G.GAME.blind_on_deck] = 'Select' end"
+position = "before"
+payload = '''if true then
+    G.GAME.blind_on_deck = G.GAME.modifiers.only_boss and 'Boss' or G.GAME.blind_on_deck
+end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "G.GAME.round_resets.blind_states.Boss = 'Upcoming'"
+position = "before"
+payload = '''
+G.GAME.round_resets.blind_states.Small = G.GAME.modifiers.only_boss and 'Hide' or G.GAME.round_resets.blind_states.Small
+G.GAME.round_resets.blind_states.Big = G.GAME.modifiers.only_boss and 'Hide' or G.GAME.round_resets.blind_states.Big'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "G.GAME.round_resets.boss_rerolled = false"
+position = "after"
+payload = '''
+G.GAME.blind_on_deck = G.GAME.modifiers.only_boss and 'Boss' or G.GAME.blind_on_deck'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "self.GAME.selected_back:apply_to_run()"
+position = "before"
+payload = '''
+if args.challenge and (args.challenge.rules.custom[1].id == 'only_boss') then G.GAME.round_resets.blind_states.Small = 'Hide' end
+if args.challenge and (args.challenge.rules.custom[1].id == 'only_boss') then G.GAME.round_resets.blind_states.Big = 'Hide' end
+if args.challenge and (args.challenge.rules.custom[2].id == 'more_bonus_blinds') then G.GAME.bonus_rate = 14 end'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = 'blind.lua'
+pattern = '''function Blind:stay_flipped(area, card)'''
+position = 'after'
+payload = '''   if G.GAME.blind.config.bonus and G.GAME.blind.config.bonus.face_down then
+        if area == G.hand then
+            if pseudorandom(pseudoseed('wheel')) < G.GAME.blind.config.bonus.face_down then
+                return true
+            end
+        end
+    end'''
+match_indent = true
