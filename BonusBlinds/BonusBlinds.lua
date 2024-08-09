@@ -4,7 +4,7 @@
 --- PREFIX: bb
 --- MOD_AUTHOR: [mathguy]
 --- MOD_DESCRIPTION: Bonus Blinds
---- VERSION: 1.5.1
+--- VERSION: 1.5.5
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
@@ -1202,7 +1202,7 @@ SMODS.Bonus {
     loc_txt = {
         name = "Hankercheif Blind",
         text = {
-            "Play {C:attention}#1#{}. Earn {C:money}$#2${} when",
+            "Play {C:attention}#1#{}. Earn {C:money}$#2#{} when",
             "a playing card is scored",
         }
     },
@@ -1808,22 +1808,6 @@ SMODS.Back {
     apply = function(self)
         G.GAME.bonus_rate = 10
         G.GAME.modifiers.scaling = (G.GAME.modifiers.scaling or 1) + 0.5
-        G.E_MANAGER:add_event(Event({
-            func = function()
-                -- for k, v in ipairs(self.effect.config.consumables) do
-                    local card = create_card('Joker', G.jokers, nil, nil, nil, nil, 'j_perkeo', 'deck')
-                    card:add_to_deck()
-                    G.jokers:emplace(card)
-                    local card = create_card('Bonus', G.consumeables, nil, nil, nil, nil, 'c_bb_weak', 'deck')
-                    card:add_to_deck()
-                    G.consumeables:emplace(card)
-                    local card = create_card('Bonus', G.consumeables, nil, nil, nil, nil, 'c_bb_weak', 'deck')
-                    card:add_to_deck()
-                    G.consumeables:emplace(card)
-                -- end
-            return true
-            end
-        }))
     end
 }
 
