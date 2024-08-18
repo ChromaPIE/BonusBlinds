@@ -150,12 +150,18 @@ SMODS.Bonus = SMODS.Consumable:extend {
             Rare = HEX("fda200"),
             Legendary = {0,0,0,1}
         }
+        local disprar = {
+            Common = '普通',
+            Uncommon = '罕见',
+            Rare = '稀有',
+            Legendary = '传奇'
+        }
         if G and G.C and G.C.DARK_EDITION then
             colours["Legendary"] = G.C.DARK_EDITION
         end
         local len = string.len(self.rarity)
         local size = 1.3 - (len > 5 and 0.02 * (len - 5) or 0)
-        badges[#badges + 1] = create_badge(self.rarity, colours[self.rarity], nil, size)
+        badges[#badges + 1] = create_badge(disprar[self.rarity], colours[self.rarity], nil, size)
     end,
     can_use = function(self, card)
         return ((not not G.blind_select) and (G.STATE ~= G.STATES.BUFFOON_PACK) and (G.STATE ~= G.STATES.TAROT_PACK) and (G.STATE ~= G.STATES.SPECTRAL_PACK) and (G.STATE ~= G.STATES.STANDARD_PACK) and (G.STATE ~= G.STATES.PLANET_PACK) and (G.STATE ~= G.STATES.SMODS_BOOSTER_OPENED))
@@ -1857,12 +1863,11 @@ SMODS.Edition {
     key = 'antichrome',
     shader = 'antichrome',
     loc_txt = {
-        name = "Antichrome",
-        label = "Antichrome",
+        name = "负彩",
+        label = "负彩",
         text = {
-            "{C:attention}+2{} Joker Slots",
-            "for {C:attention}3{} rounds",
-            "{X:mult,C:white} X2 {} Mult"
+            "{X:mult,C:white} X2 {}倍率",
+            "{C:attention}3{}回合内小丑牌槽位{C:attention}+2",
         }
     },
     extra_cost = 8,
@@ -2002,8 +2007,8 @@ SMODS.Blind {
 
 SMODS.Blind {
     loc_txt = {
-        name = 'The Infinity',
-        text = { '+1 hand when', 'hand played' }
+        name = '无尽',
+        text = { '出牌时，出牌次数+1' }
     },
     key = 'infinity',
     name = 'The Infinity',
